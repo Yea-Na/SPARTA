@@ -1,5 +1,6 @@
 package com.sparta.myselectshop.controller;
 
+import com.sparta.myselectshop.dto.FolderRequestDto;
 import com.sparta.myselectshop.dto.ProductMypriceRequestDto;
 import com.sparta.myselectshop.dto.ProductRequestDto;
 import com.sparta.myselectshop.dto.ProductResponseDto;
@@ -7,6 +8,7 @@ import com.sparta.myselectshop.entity.Product;
 import com.sparta.myselectshop.entity.User;
 import com.sparta.myselectshop.entity.UserRoleEnum;
 import com.sparta.myselectshop.repository.ProductRepository;
+import com.sparta.myselectshop.service.FolderService;
 import com.sparta.myselectshop.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,6 +27,7 @@ public class ProductController {
 
     private final ProductService productService;
     private final ProductRepository productRepository;
+    private final FolderService folderService;
 
     // 관심 상품 등록하기
     @PostMapping("/products")
@@ -59,4 +62,12 @@ public class ProductController {
         return productService.getAllProducts();
     }
 
+    @PostMapping("/folders")
+    public void addFolders(@RequestBody FolderRequestDto folderRequestDto,
+                           @AuthenticationPrincipal com.sparta.myselectshop.security.UserDetailsImpl userDetails) {
+
+        List<String> folderNames = folderRequestDto.getFolderNames();
+
+        folderService.addFolders(folderNames, userDetails.getUser());
+    }
 }
