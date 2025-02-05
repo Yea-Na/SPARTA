@@ -1,0 +1,13 @@
+services:
+  mysql:
+    image: "mysql:8.0.36"   #mysql이라고만 하면 항상 최신버전 사용
+    container_name: shop
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345678
+      MYSQL_DATABASE: shop #shop 데이터베이스 자동생성
+
+    volumes:
+      - ./config/:/docker-entrypoint-initdb.d/
+
+    ports:
+      - 3306:3306
