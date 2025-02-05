@@ -11,7 +11,6 @@ import java.util.List;
 
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
-//    Page<Product> findAllByUser(User user, Pageable pageable);
-
+    Page<Product> findAllByUserAndProductFolderList_FolderId(User user, Long folderId, org.springframework.data.domain.Pageable pageable);
     Page<Product> findAllByUser(User user, org.springframework.data.domain.Pageable pageable);
 }
