@@ -3,8 +3,16 @@ package com.sparta.myselectshop.controller;
 import com.sparta.myselectshop.dto.ProductMypriceRequestDto;
 import com.sparta.myselectshop.dto.ProductRequestDto;
 import com.sparta.myselectshop.dto.ProductResponseDto;
+import com.sparta.myselectshop.entity.Product;
+import com.sparta.myselectshop.entity.User;
+import com.sparta.myselectshop.entity.UserRoleEnum;
+import com.sparta.myselectshop.repository.ProductRepository;
 import com.sparta.myselectshop.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +24,7 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    private final ProductRepository productRepository;
 
     // 관심 상품 등록하기
     @PostMapping("/products")
@@ -34,9 +43,14 @@ public class ProductController {
 
     // 관심 상품 조회하기
     @GetMapping("/products")
-    public List<ProductResponseDto> getProducts(@AuthenticationPrincipal com.sparta.myselectshop.security.UserDetailsImpl userDetails) {
+    public Page<ProductResponseDto> getProducts(
+            @RequestParam("page") int page,
+            @RequestParam("size") int size,
+            @RequestParam("sortBy") String sortBy,
+            @RequestParam("isAsc") boolean isAsc,
+            @AuthenticationPrincipal com.sparta.myselectshop.security.UserDetailsImpl userDetails) {
         // 응답 보내기
-        return productService.getProducts(userDetails.getUser());
+        return productService.getProducts(userDetails.getUser(),  page-1, size, sortBy, isAsc);
     }
 
     // 관리자 조회
